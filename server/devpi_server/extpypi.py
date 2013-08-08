@@ -7,6 +7,7 @@ testresult storage.
 import json
 import re
 import sys
+from urlparse import urlparse
 
 from ._pip import HTMLPage
 
@@ -45,6 +46,8 @@ class IndexParser:
         p = HTMLPage(html, disturl.url)
         seen = set()
         for link in p.links:
+            if urlparse(link.url).scheme not in {'http', 'https'}:
+                continue
             newurl = DistURL(link.url)
             eggfragment = newurl.eggfragment
             if scrape and eggfragment:
